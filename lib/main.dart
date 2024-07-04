@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';  // Importa esta librería para las funciones de llamada, ruta y compartir
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -19,12 +21,12 @@ class MyApp extends StatelessWidget {
               LocationSection(
                 name: 'Quito',
                 description: 'Quito es la capital de Ecuador.',
-                image: '', // Ruta de la imagen para Quito
+                image: 'assets/quito.jpg',
               ),
               LocationSection(
                 name: 'La Basilica',
                 description: 'La Basílica del Voto Nacional es un monumento religioso en Quito, Ecuador.',
-                image: 'assets/basilica.jpg', // Ruta de la imagen para La Basilica
+                image: 'assets/basilica.jpg',
               ),
               LocationSection(
                 name: 'El Panecillo',
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
               LocationSection(
                 name: 'La Ronda',
                 description: 'La Ronda es un barrio histórico y cultural en el centro de Quito, conocido por sus calles empedradas y arquitectura colonial.',
-                image: 'assets/la_ronda.jpg', // Ruta de la imagen para La Ronda
+                image: 'assets/ronda.jpg', // Ruta de la imagen para La Ronda
               ),
             ],
           ),
@@ -66,8 +68,8 @@ class LocationSection extends StatelessWidget {
     return Column(
       children: [
         TitleSection(name: name, location: description),
-        const ButtonSection(),
         ImageSection(image: image),
+        ButtonSection(),
         TextSection(description: description),
         const SizedBox(height: 20), // Espacio adicional entre secciones
       ],
@@ -127,6 +129,30 @@ class TitleSection extends StatelessWidget {
 class ButtonSection extends StatelessWidget {
   const ButtonSection({Key? key}) : super(key: key);
 
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _routeToLocation(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _shareContent(String content) async {
+    if (await canLaunch(content)) {
+      await launch(content);
+    } else {
+      throw 'Could not share $content';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color color = Theme.of(context).primaryColor;
@@ -134,20 +160,23 @@ class ButtonSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ButtonWithText(
-            color: color,
-            icon: Icons.call,
-            label: 'CALL',
+          IconButton(
+            icon: Icon(Icons.call, color: color),
+            onPressed: () {
+              _makePhoneCall('tel:+123456789');
+            },
           ),
-          ButtonWithText(
-            color: color,
-            icon: Icons.near_me,
-            label: 'ROUTE',
+          IconButton(
+            icon: Icon(Icons.near_me, color: color),
+            onPressed: () {
+              _routeToLocation('https://www.google.com/maps');
+            },
           ),
-          ButtonWithText(
-            color: color,
-            icon: Icons.share,
-            label: 'SHARE',
+          IconButton(
+            icon: Icon(Icons.share, color: color),
+            onPressed: () {
+              _shareContent('Check out this location!');
+            },
           ),
         ],
       ),
@@ -155,40 +184,6 @@ class ButtonSection extends StatelessWidget {
   }
 }
 
-class ButtonWithText extends StatelessWidget {
-  final Color color;
-  final IconData icon;
-  final String label;
-
-  const ButtonWithText({
-    Key? key,
-    required this.color,
-    required this.icon,
-    required this.label,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class ImageSection extends StatelessWidget {
   final String image;
