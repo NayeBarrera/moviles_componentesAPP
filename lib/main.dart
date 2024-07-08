@@ -31,12 +31,12 @@ class MyApp extends StatelessWidget {
               LocationSection(
                 name: 'El Panecillo',
                 description: 'El Panecillo es una colina en el centro de Quito, con una estatua de la Virgen de Quito en la cima.',
-                image: 'assets/panecillo.jpg', // Ruta de la imagen para El Panecillo
+                image: 'assets/panecillo.jpg', 
               ),
               LocationSection(
                 name: 'Guayaquil',
                 description: 'Guayaquil es la ciudad más grande y poblada de Ecuador, situada en la costa del Pacífico.',
-                image: 'assets/guayaquil.jpg', // Ruta de la imagen para Guayaquil
+                image: 'assets/guayaquil.jpg', 
               ),
               LocationSection(
                 name: 'La Ronda',
